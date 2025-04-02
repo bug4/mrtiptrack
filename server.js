@@ -16,7 +16,7 @@ const PORT = process.env.PORT || 3001;
 app.use(cors());
 app.use(express.json());
 
-// Proxy route for sending Telegram messages
+// Fix the route to use a regular string (no parameters)
 app.post('/api/send-to-telegram', async (req, res) => {
   try {
     const { message } = req.body;
@@ -59,15 +59,12 @@ app.post('/api/send-to-telegram', async (req, res) => {
     console.error('Server error sending to Telegram:');
     
     if (error.response) {
-      // The request was made and the server responded with a status code
       console.error('Response data:', error.response.data);
       console.error('Response status:', error.response.status);
       console.error('Response headers:', error.response.headers);
     } else if (error.request) {
-      // The request was made but no response was received
       console.error('No response received:', error.request);
     } else {
-      // Something happened in setting up the request
       console.error('Error message:', error.message);
     }
     
@@ -78,12 +75,12 @@ app.post('/api/send-to-telegram', async (req, res) => {
   }
 });
 
-// Test endpoint to verify server is running
+// Test endpoint with no parameters
 app.get('/api/test', (req, res) => {
   res.json({ message: 'Server is running correctly' });
 });
 
-// Direct test endpoint for Telegram
+// Test endpoint for Telegram
 app.get('/api/test-telegram', async (req, res) => {
   try {
     const botToken = process.env.TELEGRAM_BOT_TOKEN;
@@ -117,6 +114,11 @@ app.get('/api/test-telegram', async (req, res) => {
       details: error.response?.data || error.message
     });
   }
+});
+
+// Simple catch-all route for testing
+app.get('/', (req, res) => {
+  res.send('IP Tracker server is running');
 });
 
 // Serve static assets in production
