@@ -6,8 +6,14 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// Basic middleware
-app.use(cors());
+// Updated CORS configuration
+app.use(cors({
+  origin: '*', // In production, you might want to restrict this to your Netlify domain
+  methods: ['GET', 'POST'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
+// Parse JSON bodies
 app.use(express.json());
 
 // Home route
